@@ -1,0 +1,31 @@
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+<polymer-element name="defined-slider" extends="paper-slider" attributes="values color">
+    <template>
+        <style>
+            :host::shadow #sliderBar::shadow #activeProgress, :host::shadow #sliderKnobInner, :host::shadow #sliderKnobInner::before {
+                background-color: {{color}};
+            }
+        </style>
+        <shadow></shadow>
+    </template>
+    <script>
+        Polymer('defined-slider', {
+            values: [],
+            color: "#3f51b5",
+            attributeChanged: function (name, oldValue, newValue) {
+                this.super(arguments);
+                if (name === "values") {
+                    if (typeof this.values === "string" && this.values !== "") {
+                        this.values = JSON.parse(this.values);
+                    }
+                    if (this.values.length < 2) {
+                        this.disabled = true;
+                    }
+                    this.min = 0;
+                    this.max = this.values.length - 1;
+                    this.value = this.values.indexOf(this.immediateValue);
+                }
+            }
+        });
+    </script>
+</polymer-element>

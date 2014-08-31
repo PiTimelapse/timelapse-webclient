@@ -1,0 +1,61 @@
+<script>
+    // Extends the mapping for ng-polymer-elements, will disapear when polymer will work properly with angular
+    if (!window.NG_POLYMER_ELEMENTS_EXTENDED_MAPPINGS) {
+        window.NG_POLYMER_ELEMENTS_EXTENDED_MAPPINGS = {};
+    }
+    window.NG_POLYMER_ELEMENTS_EXTENDED_MAPPINGS.sliderBox = {
+        ngChange: {
+            event: "manual-change"
+        },
+        ngModel: {
+            primitive: "immediateValue"
+        }
+    };
+</script>
+<link rel="import" href="defined-slider.html">
+<polymer-element name="slider-box" extends="defined-slider" attributes="format label title">
+    <template>
+        <style>
+            :host {
+                display: block;
+                width: 100%;
+            }
+            :host label{
+                font-weight: normal;
+            }
+            :host .disabledtrue {
+                color: grey;
+            }
+        </style>
+        <label class="disabled{{disabled}}">{{title}}</label>
+        <div layout horizontal>
+            <div flex three>
+                <shadow></shadow>
+            </div>
+            <span class="disabled{{disabled}}" flex hidden?="{{!label}}">{{immediateValue | formatLabel}}</span>
+        </div>
+    </template>
+    <script>
+        Polymer('slider-box', {
+            format: null,
+            label: true,
+            title: "",
+            formatLabel: function (input) {
+                if (typeof this.format === "string") {
+                    return this.format.replace("%v", input);
+                } else if (this.format === null){
+                    return this.defaultFormat(input);
+                } else {
+                    return input;
+                }
+            },
+            defaultFormat: function (input) {
+                if (this.values[0] && typeof this.values[0] === "string") {
+                    return this.values[input];
+                } else {
+                    return input;
+                }
+            }
+        });
+    </script>
+</polymer-element>

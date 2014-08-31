@@ -1,0 +1,23 @@
+.sidebar {
+    border-right: 1px solid grey;
+}
+.content {
+    height: 100%;
+}
+.camera {
+    border-bottom: 1px solid grey;
+    padding: 10px;
+}
+.camera.selected {
+    font-weight: bold;
+    background-color: lightgrey;
+}
+.mainBoard {
+    padding: 10px;
+}
+.preview {
+    padding: 10%;
+}
+.preview img {
+    width: 80%;
+}
