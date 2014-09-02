@@ -55,7 +55,7 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
             $scope.props = options;
         });
     });
-    Socket.on('error', function (err) {
+    Socket.on('camera:error', function (err) {
         $scope.$apply(function () {
             $scope.notification.message = err;
         });
