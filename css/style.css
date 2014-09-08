@@ -21,3 +21,12 @@
 .preview img {
     width: 80%;
 }
+.topClean {
+    padding-top: 0px;
+}
+paper-tabs.littleTabs::shadow #selectionBar {
+  background-color: green;
+}
+.littleTabs paper-tab::shadow #ink {
+    color: green;
+}

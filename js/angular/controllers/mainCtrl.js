@@ -4,13 +4,14 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
         message: "",
         type: ""
     };
-    $scope.cameras = [];
-    $scope.selectedCamera = null;
     $scope.tab = 0;
+    $scope.tlTab = 0;
     $scope.tlDelay = 90;
     $scope.conf = {};
+    $scope.config = {};
     $scope.preview = "";
     $scope.brightness = "";
+    $scope.timelapses = [];
     $scope.props = {
         aperture: {
             values: [3.5, 4, 4.5, 5, 5.6, 6.3, 7.1, 8, 9, 10, 11, 13, 14, 16, 18, 20, 22],
@@ -27,32 +28,15 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
     };
     Socket.on("init", function (data) {
         $scope.$apply(function () {
-            $scope.cameras = data.cameras;
-            $scope.preview = data.previewLocation;
+            $scope.config = data.camera.config;
+            $scope.camera = data.camera.gphotoObject;
             $scope.conf = data.conf;
-        });
-    });
-    Socket.on('camera:remove', function (data) {
-        var index = findByPort(data.camera, $scope.cameras);
-        if (index === $scope.selectedCamera) {
-            $scope.$apply(function () {
-                $scope.selectedCamera = null;
-                $scope.notification.message = "The camera your were working on was disconected";
-            });
-            toast.show();
-        }
-        $scope.$apply(function () {
-            $scope.cameras.splice(index, 1);
-        });
-    });
-    Socket.on('camera:add', function (data) {
-        $scope.$apply(function () {
-            $scope.cameras.push(data.camera);
+            $scope.timelapses = data.timelapses;
         });
     });
     Socket.on('camera:config', function (options) {
         $scope.$apply(function () {
-            $scope.props = options;
+            $scope.config = options;
         });
     });
     Socket.on('camera:error', function (err) {
@@ -69,12 +53,8 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
         });
     });
     $scope.propertyChange = function (prop) {
-        console.log($scope.props[prop].label + " changed to " + $scope.props[prop].value);
-        Socket.emit("camera:changeprop", {prop: prop, value: $scope.props[prop].choices[$scope.props[prop].value]});
-    };
-    $scope.selectCamera = function (index) {
-        $scope.selectedCamera = index;
-        Socket.emit('camera:select', {camera: $scope.cameras[index]});
+        console.log($scope.config[prop].label + " changed to " + $scope.config[prop].value);
+        Socket.emit("camera:changeprop", {prop: prop, value: $scope.config[prop].choices[$scope.config[prop].value]});
     };
     $scope.takePicture = function () {
         Socket.emit('camera:takepicture');
@@ -86,12 +66,3 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
         Socket.emit('timelapse:stop');
     }
 }]);
-
-function findByPort (needle, stack) {
-    for (var i = 0, len = stack.length; i < len; i += 1) {
-        if (needle.port === stack[i].port) {
-            return i;
-        }
-    }
-    return -1;
-}
