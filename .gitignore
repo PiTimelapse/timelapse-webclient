@@ -1,3 +1,6 @@
 bower_components/*
 *.log
-public/*
+dev/public/*
+prod/*
+.tmp/*
+node_modules/*

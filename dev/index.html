@@ -4,14 +4,14 @@
         <meta charset="UTF-8"></meta>
         <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
         <title>Timelapse Web Client</title>
-        <script src="bower_components/platform/platform.js"></script>
-        <link rel="import" href="bower_components/font-roboto/roboto.html">
-        <link rel="import" href="bower_components/paper-button/paper-button.html">
-        <link rel="import" href="bower_components/paper-item/paper-item.html">
-        <link rel="import" href="bower_components/paper-toast/paper-toast.html">
-        <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
-        <link rel="import" href="bower_components/paper-input/paper-input.html">
-        <link rel="import" href="bower_components/paper-dropdown/paper-dropdown.html">
+        <script src="../bower_components/platform/platform.js"></script>
+        <link rel="import" href="../bower_components/font-roboto/roboto.html">
+        <link rel="import" href="../bower_components/paper-button/paper-button.html">
+        <link rel="import" href="../bower_components/paper-item/paper-item.html">
+        <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+        <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+        <link rel="import" href="../bower_components/paper-input/paper-input.html">
+        <link rel="import" href="../bower_components/paper-dropdown/paper-dropdown.html">
         <link rel="import" href="components/slider-box.html">
         <link rel="stylesheet" href="css/style.css">
         <style>
@@ -95,12 +95,14 @@
                 </div>
                 <paper-toast id="toast" duration="5000" text="{{notification.message}}"></paper-toast>
             </div>
-        <script src="http://localhost:3000/socket.io/socket.io.js"></script>
-        <script src="bower_components/angular/angular.min.js"></script>
-        <script src="bower_components/ng-polymer-elements/ng-polymer-elements.min.js"></script>
+        <script src="http://localhost:3000/socket.io/socket.io.js" id="socketScript"></script>
+        <!-- build:js js/app.js -->
+        <script src="../bower_components/angular/angular.min.js"></script>
+        <script src="../bower_components/ng-polymer-elements/ng-polymer-elements.min.js"></script>
         <script src="js/angular/modules.js"></script>
         <script src="js/angular/controllers/mainCtrl.js"></script>
         <script src="js/angular/services/socket.js"></script>
         <script src="js/angular/app.js"></script>
+        <!-- endbuild -->
     </body>
 </html>
