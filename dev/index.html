@@ -49,7 +49,10 @@
                         {{timelapse.date | date:'medium'}}
                     </paper-item>
                 </div>
-                <div flex ng-show="config !== null">
+                <div flex ng-show="camera !== null">
+                    <div class="timelapseInfo" ng-show="currentTimelapse !== null">
+                        Timelapse runnning: {{currentTimelapse.photoNb}} picture<span ng-show="currentTimelapse.photoNb>1">s</span> taken.
+                    </div>
                     <paper-tabs ng-model="tab">
                         <paper-tab>Settings</paper-tab>
                         <paper-tab>Timelapse</paper-tab>
@@ -90,7 +93,7 @@
                         <paper-button label="Save" raisedButton ng-click="updateConf()"></paper-button>
                     </div>
                 </div>
-                <div flex layout horizontal center-justified ng-show="config === null">
+                <div flex layout horizontal center-justified ng-show="camera === null">
                     <p self-center>No camera detected. Check on server side</p>
                 </div>
                 <paper-toast id="toast" duration="5000" text="{{notification.message}}"></paper-toast>

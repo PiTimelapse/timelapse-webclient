@@ -46,6 +46,9 @@ module.exports = function (grunt) {
         },
         usemin: {
             html: ['dev/pre.html']
+        },
+        node_startup: {
+            node_exec: "$(which node)"
         }
     });
 

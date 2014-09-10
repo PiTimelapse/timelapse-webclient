@@ -30,3 +30,8 @@ paper-tabs.littleTabs::shadow #selectionBar {
 .littleTabs paper-tab::shadow #ink {
     color: green;
 }
+.timelapseInfo {
+    padding: 5px;
+    text-align: center;
+    background-color: #8DD7C0;
+}
