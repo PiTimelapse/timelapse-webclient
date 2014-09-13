@@ -1,4 +1,5 @@
-<polymer-element name="timelapse-bar" attributes="status count">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<polymer-element name="timelapse-bar">
     <template>
         <style>
             :host {
@@ -7,7 +8,6 @@
                 left: 0;
                 top: 0;
                 z-index: 10;
-                height: 40px;
             }
             :host .full {
                 width: 100%;
@@ -21,26 +21,39 @@
             :host .running {
                 background-color: #8DD7C0;
             }
+            :host .processing {
+                background-color: rgb(255,179, 71);
+            }
+            :host .progress {
+                width: 100%;
+            }
+            paper-progress::shadow #activeProgress {
+                transition: all linear 200ms;
+            }
         </style>
         <template if="{{true}}">
-            <div layout horizontal center-justified class="full {{status}}">
+            <div layout vertical center-justified class="full {{timelapse.status}}">
                 <p self-center>
-                    <template if="{{status === 'waiting'}}">
+                    <template if="{{timelapse.status === 'waiting'}}">
                         Ready to start timelapse !
                     </template>
-                    <template if="{{status === 'running'}}">
-                        Timelapse runnning: {{count}} picture<template if="{{count>1}}">s</template> taken.
+                    <template if="{{timelapse.status === 'running'}}">
+                        Timelapse runnning: {{timelapse.photoNb}} picture<template if="{{timelapse.photoNb>1}}">s</template> taken.
                     </template>
-                    <template if="{{status === 'ended'}}">
-                        Timelapse ended, {{count}} picture<template if="{{count>1}}">s</template> taken.
+                    <template if="{{timelapse.status === 'ended'}}">
+                        Timelapse ended, {{timelapse.photoNb}} picture<template if="{{timelapse.photoNb>1}}">s</template> taken.
+                    </template>
+                    <template if="{{timelapse.status === 'processing'}}}">
+                        Processing: {{timelapse.process.type}}
                     </template>
                 </p>
+                <paper-progress class="progress" value="{{timelapse.process.value}}"></paper-progress>
             </div>
         </template>
     </template>
     <script>
         Polymer('timelapse-bar', {
-
+            timelapse: {}
         });
     </script>
 </polymer-element>

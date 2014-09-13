@@ -6,7 +6,10 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
     };
     var init = function () {
         $scope.currentTimelapse = {
-            status: "waiting"
+            status: "waiting",
+            process: {
+                type: ''
+            }
         };
         $scope.tab = 0;
         $scope.conf = {};
@@ -76,6 +79,19 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
     });
     Socket.on('tl:info', function (err) {
         showError(err);
+    });
+    Socket.on('process:step', function (data) {
+        $scope.$apply(function () {
+            $scope.currentTimelapse.status = "processing";
+            $scope.currentTimelapse.process = data;
+        });
+    });
+    Socket.on('process:end', function () {
+        showError($scope.currentTimelapse.process.type + " finished");
+        $scope.$apply(function () {
+            $scope.currentTimelapse.process.type = '';
+            $scope.currentTimelapse.status = "ended";
+        });
     });
     var showError = function (err) {
         var d = new Date();

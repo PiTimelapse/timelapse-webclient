@@ -46,11 +46,16 @@
                     primitive: "selected"
                 }
             };
+            window.NG_POLYMER_ELEMENTS_EXTENDED_MAPPINGS.timelapseBar = {
+                ngModel: {
+                    object: "timelapse"
+                }
+            };
         </script>
     </head>
     <body unresolved touch-action="auto" ng-app="tl-app">
             <div class="content" flex layout horizontal ng-controller="MainController">
-                <timelapse-bar status="{{currentTimelapse.status}}" count="{{currentTimelapse.photoNb}}"></timelapse-bar>
+                <timelapse-bar ng-model="currentTimelapse"></timelapse-bar>
                 <div class="sidebar">
                     <h4>Controlling {{camera.model}}</h4>
                     <paper-item class="camera" ng-repeat="log in logs">
