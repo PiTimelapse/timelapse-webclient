@@ -65,9 +65,11 @@ module.exports = function (grunt) {
         var files = this.files.map(function (item) {
             return item.orig.src
         });
+        var hostname = os.hostname(),
+            realHostname = hostname.indexOf('.local') === -1 ? hostname + ".local" : hostname;
         replace({
             regex: "http://localhost",
-            replacement: "http://" + os.hostname(),
+            replacement: "http://" + realHostname,
             paths: files[0]
         });
     });

@@ -11,6 +11,7 @@
         <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
         <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
         <link rel="import" href="../bower_components/paper-input/paper-input.html">
+        <link rel="import" href="../bower_components/core-animated-pages/core-animated-pages.html">
         <link rel="import" href="../bower_components/paper-dropdown/paper-dropdown.html">
         <link rel="import" href="components/slider-box.html">
         <link rel="import" href="components/timelapse-bar.html">
@@ -40,6 +41,11 @@
                     primitive: "selected"
                 }
             };
+            window.NG_POLYMER_ELEMENTS_EXTENDED_MAPPINGS.paperDropdown = {
+                ngModel: {
+                    primitive: "selected"
+                }
+            };
         </script>
     </head>
     <body unresolved touch-action="auto" ng-app="tl-app">
@@ -47,40 +53,42 @@
                 <timelapse-bar status="{{currentTimelapse.status}}" count="{{currentTimelapse.photoNb}}"></timelapse-bar>
                 <div class="sidebar">
                     <h4>Controlling {{camera.model}}</h4>
-                    <p ng-hide="timelapses.length">No timelapse</p>
                     <paper-item class="camera" ng-repeat="log in logs">
                         {{log}}
                     </paper-item>
                 </div>
-                <div flex ng-show="camera !== null">
+                <div flex ng-if="camera !== null" layout vertical>
                     <paper-tabs ng-model="tab" id="tabs">
                         <paper-tab>Settings</paper-tab>
                         <paper-tab>Timelapse</paper-tab>
                         <paper-tab>Advanced</paper-tab>
                     </paper-tabs>
-                    <div class="mainBoard" ng-show="tab === 0" layout vertical center>
-                        <slider-box ng-repeat="(key,prop) in config"
-                                    values="{{prop.choices}}"
-                                    title="{{prop.label}}"
-                                    ng-model="prop.value"
-                                    ng-change="propertyChange('{{key}}')" ng-if="prop.type === 'choice'"></slider-box>
-                    </div>
-                    <div class="mainBoard" ng-show="tab === 1" layout vertical center>
-                        <paper-input type="number" ng-model="tlDelay" min="4" label="Interval" floatingLabel></paper-input>
-                        <div layout horizontal>
-                            <paper-button label="Start timelapse" raisedButton ng-click="startTimelapse()" ng-disabled="currentTimelapse.status === 'running'"></paper-button>
-                            <paper-button label="Stop timelapse" raisedButton ng-click="stopTimelapse()" ng-disabled="currentTimelapse.status !== 'running'"></paper-button>
-                        </div>
-                        <brightness-slider min="{{conf.MIN_BRIGHTNESS}}" max="{{conf.MAX_BRIGHTNESS}}" value="{{brightness}}" disabled></brightness-slider>
-                        <img src="{{preview}}" alt="Preview" class="preview">
-                    </div>
-                    <div class="mainBoard" ng-show="tab === 2" layout vertical center>
-                        <paper-input type="number" floatingLabel label="Minimum brightness" ng-model="conf.MIN_BRIGHTNESS"></paper-input>
-                        <paper-input type="number" floatingLabel label="Maximum brightness" ng-model="conf.MAX_BRIGHTNESS"></paper-input>
-                        <paper-dropdown valueattr="value">
-                            <paper-item ng-repeat="(key,prop) in config" label="{{prop.label}}" value="key"></paper-item>
-                        </paper-dropdown>
-                        <paper-button label="Save" raisedButton ng-click="updateConf()"></paper-button>
+                    <div flex class="mainBoard">
+                        <section ng-show="tab === 0" layout vertical center>
+                            <slider-box ng-repeat="(key,prop) in config"
+                                        values="{{prop.choices}}"
+                                        title="{{prop.label}}"
+                                        ng-model="prop.value"
+                                        ng-change="propertyChange('{{key}}')" ng-if="prop.type === 'choice'"></slider-box>
+                        </section>
+                        <section ng-show="tab === 1" layout vertical center>
+                            <paper-input type="number" class="inter" ng-model="timelapse.delay" min="4" label="Interval" floatingLabel></paper-input>
+                            <div layout horizontal>
+                                <paper-button label="Preview" raisedButton ng-click="takePicture()" ng-disabled="currentTimelapse.status === 'running'"></paper-button>
+                                <paper-button label="Start timelapse" raisedButton ng-click="startTimelapse()" ng-disabled="currentTimelapse.status === 'running'"></paper-button>
+                                <paper-button label="Stop timelapse" raisedButton ng-click="stopTimelapse()" ng-disabled="currentTimelapse.status !== 'running'"></paper-button>
+                            </div>
+                            <brightness-slider min="{{conf.MIN_BRIGHTNESS}}" max="{{conf.MAX_BRIGHTNESS}}" value="{{brightness}}" disabled></brightness-slider>
+                            <img ng-src="{{preview}}" alt="Preview" class="preview">
+                        </section>
+                        <section ng-show="tab === 2" layout vertical center>
+                            <paper-input type="number" floatingLabel label="Minimum brightness" ng-model="conf.MIN_BRIGHTNESS"></paper-input>
+                            <paper-input type="number" floatingLabel label="Maximum brightness" ng-model="conf.MAX_BRIGHTNESS"></paper-input>
+                            <paper-dropdown valueattr="value" ng-model="conf.BRIGHTNESS_DRIVER">
+                                <paper-item ng-repeat="(key,prop) in config" label="{{prop.label}}" value="{{key}}"></paper-item>
+                            </paper-dropdown>
+                            <paper-button label="Save" raisedButton ng-click="changeAdvanced()"></paper-button>
+                        </section>
                     </div>
                 </div>
                 <div flex layout horizontal center-justified ng-show="camera === null">

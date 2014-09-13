@@ -15,13 +15,15 @@
 .camera {
     border-bottom: 1px solid grey;
     padding: 10px;
-}
-.camera.selected {
-    font-weight: bold;
-    background-color: lightgrey;
+    white-space: normal;
+    height: auto;
 }
 .mainBoard {
     padding: 10px;
+    background-color: #EFEFEF;
+}
+.mainBoard>section {
+    width: 100%;
 }
 .preview {
     padding: 10%;
@@ -49,4 +51,7 @@ paper-button {
 }
 paper-dropdown {
     background-color: transparent;
+}
+.inter {
+    width: 6em;
 }

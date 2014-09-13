@@ -38,7 +38,7 @@
             }
         </style>
         <div class="label">
-            Brightness
+            Brightness monitor
         </div>
         <div class="tick value"></div>
         <div class="tick min"></div>
@@ -46,11 +46,16 @@
     </template>
     <script>
         Polymer('brightness-slider', {
+            percent: 50,
             valueChanged: function (oldValue, newValue) {
-                var inter = parseInt(this.max) - parseInt(this.min),
-                    realMin = parseInt(this.min) - inter,
-                    realMax = parseInt(this.max) + inter;
-                this.percent =  ((Math.max(0, newValue - realMin)) / (Math.min(realMax, realMax - realMin))) * 100;
+                if (newValue === '') {
+                    this.percent = 50;
+                } else {
+                    var inter = parseInt(this.max) - parseInt(this.min),
+                        realMin = parseInt(this.min) - inter,
+                        realMax = parseInt(this.max) + inter;
+                    this.percent =  ((Math.max(0, newValue - realMin)) / (Math.min(realMax, realMax - realMin))) * 100;
+                }
             }
         });
     </script>

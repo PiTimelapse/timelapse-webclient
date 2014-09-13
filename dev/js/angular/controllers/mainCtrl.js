@@ -9,13 +9,13 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
             status: "waiting"
         };
         $scope.tab = 0;
-        $scope.tlTab = 0;
-        $scope.tlDelay = 20;
         $scope.conf = {};
         $scope.config = {};
-        $scope.preview = "";
+        $scope.preview = window.socketIOServer + "/" + new Date().getTime();
         $scope.brightness = "";
-        $scope.timelapses = [];
+        $scope.timelapse = {
+            delay: 20
+        };
         $scope.logs = [];
     };
     init();
@@ -78,23 +78,25 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
     });
     var showError = function (err) {
         var d = new Date();
-        $scope.logs.unshift(d.getHours() + ":" + d.getMinutes() + " - " + err);
+        $scope.logs.unshift(d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + " - " + err);
         $scope.$apply(function () {
             $scope.notification.message = err;
         });
         toast.show();
     };
     $scope.propertyChange = function (prop) {
-        console.log($scope.config[prop].label + " changed to " + $scope.config[prop].value);
         Socket.emit("camera:changeprop", {prop: prop, value: $scope.config[prop].choices[$scope.config[prop].value]});
     };
     $scope.takePicture = function () {
         Socket.emit('camera:takepicture');
     };
     $scope.startTimelapse = function () {
-        Socket.emit('timelapse:start', {delay: $scope.tlDelay});
+        Socket.emit('timelapse:start', {delay: $scope.timelapse.delay});
     };
     $scope.stopTimelapse = function () {
         Socket.emit('timelapse:stop');
+    };
+    $scope.changeAdvanced = function () {
+        Socket.emit('advanced:change', $scope.conf);
     }
 }]);
