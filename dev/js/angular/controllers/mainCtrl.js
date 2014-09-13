@@ -11,7 +11,7 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
         $scope.tab = 0;
         $scope.conf = {};
         $scope.config = {};
-        $scope.preview = window.socketIOServer + "/" + new Date().getTime();
+        $scope.preview = window.socketIOServer + "/" + new Date().getTime() + '/pic';
         $scope.brightness = "";
         $scope.timelapse = {
             delay: 20
@@ -62,7 +62,7 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
     });
     Socket.on('picture:preview', function (data) {
         $scope.$apply(function () {
-            $scope.preview = window.socketIOServer + "/" + new Date().getTime();
+            $scope.preview = window.socketIOServer + "/" + new Date().getTime() + "/pic";
             $scope.brightness = data.mean;
         });
     });
