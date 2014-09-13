@@ -1,0 +1,57 @@
+<polymer-element name="brightness-slider" attributes="min max value">
+    <template>
+        <style>
+            :host {
+                border-bottom: 1px solid grey;
+                width: 100%;
+                margin: 10px;
+                position: relative;
+            }
+            :host .value {
+                width: 0;
+            	height: 0;
+            	border-left: 4px solid transparent;
+            	border-right: 4px solid transparent;
+            	border-bottom: 6px solid transparent;
+
+            	border-top: 8px solid black;
+            }
+            :host .tick {
+                margin-left: {{percent}}%;
+                position: absolute;
+                bottom: 0;
+                transition: all linear 400ms;
+            }
+            :host .min, :host .max {
+                width: 3px;
+                height: 6px;
+                background-color: grey;
+            }
+            :host .min {
+                margin-left: 33%;
+            }
+            :host .max {
+                margin-left: 66%;
+            }
+            :host .label {
+                margin-bottom: 14px;
+            }
+        </style>
+        <div class="label">
+            Brightness
+        </div>
+        <div class="tick value"></div>
+        <div class="tick min"></div>
+        <div class="tick max"></div>
+    </template>
+    <script>
+        Polymer('brightness-slider', {
+            valueChanged: function (oldValue, newValue) {
+                var inter = parseInt(this.max) - parseInt(this.min),
+                    realMin = parseInt(this.min) - inter,
+                    realMax = parseInt(this.max) + inter;
+                this.percent =  ((Math.max(0, newValue - realMin)) / (Math.min(realMax, realMax - realMin))) * 100;
+            }
+        });
+    </script>
+</polymer-element>

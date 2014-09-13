@@ -1,8 +1,16 @@
 .sidebar {
     border-right: 1px solid grey;
+    position: fixed;
+    top: 40px;
+    left: 0;
+    bottom: 0;
+    width: 25%;
+
 }
 .content {
     height: 100%;
+    margin-top: 40px;
+    margin-left: 25%;
 }
 .camera {
     border-bottom: 1px solid grey;
@@ -30,8 +38,15 @@ paper-tabs.littleTabs::shadow #selectionBar {
 .littleTabs paper-tab::shadow #ink {
     color: green;
 }
-.timelapseInfo {
-    padding: 5px;
-    text-align: center;
-    background-color: #8DD7C0;
+.preview {
+    width: 80%;
+}
+.central-view {
+    position: relative;
+}
+paper-button {
+    margin: 3px;
+}
+paper-dropdown {
+    background-color: transparent;
 }

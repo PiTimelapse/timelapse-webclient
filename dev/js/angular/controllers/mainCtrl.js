@@ -5,15 +5,18 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
         type: ""
     };
     var init = function () {
-        $scope.currentTimelapse = null;
+        $scope.currentTimelapse = {
+            status: "waiting"
+        };
         $scope.tab = 0;
         $scope.tlTab = 0;
-        $scope.tlDelay = 90;
+        $scope.tlDelay = 20;
         $scope.conf = {};
         $scope.config = {};
         $scope.preview = "";
         $scope.brightness = "";
         $scope.timelapses = [];
+        $scope.logs = [];
     };
     init();
     Socket.on('disconnect', function () {
@@ -26,11 +29,12 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
         });
     });
     Socket.on("timelapse:start", function () {
-        $scope.currentTimelapse = {photoNb: 0};
+        $scope.currentTimelapse.photoNb = 0;
+        $scope.currentTimelapse.status = "running";
         showError('Timelapse started');
     });
     Socket.on("timelapse:stop", function () {
-        $scope.currentTimelapse = null;
+        $scope.currentTimelapse.status = "ended";
         showError("Timelapse stopped");
     });
     Socket.on("init", function (data) {
@@ -39,7 +43,10 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
             $scope.camera = data.camera.gphotoObject;
             $scope.conf = data.conf;
             $scope.timelapses = data.timelapses;
-            $scope.currentTimelapse = data.currentTimelapse;
+            if (data.currentTimelapse) {
+                $scope.currentTimelapse.status = "running";
+                $scope.currentTimelapse.photoNb = data.currentTimelapse.photoNb;
+            }
         });
     });
     Socket.on('camera', function (data) {
@@ -53,6 +60,12 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
             $scope.config = options;
         });
     });
+    Socket.on('picture:preview', function (data) {
+        $scope.$apply(function () {
+            $scope.preview = window.socketIOServer + "/" + new Date().getTime();
+            $scope.brightness = data.mean;
+        });
+    });
     // Weird but it seems that giving showError as callback stop the heartbeat
     Socket.on('camera:error', function (err) {
         showError(err);
@@ -64,7 +77,8 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
         showError(err);
     });
     var showError = function (err) {
-        console.log(err);
+        var d = new Date();
+        $scope.logs.unshift(d.getHours() + ":" + d.getMinutes() + " - " + err);
         $scope.$apply(function () {
             $scope.notification.message = err;
         });
