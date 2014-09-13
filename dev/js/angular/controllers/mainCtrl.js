@@ -65,6 +65,7 @@ tlCtrls.controller('MainController', ["$scope", "Socket", function ($scope, Sock
             $scope.preview = window.socketIOServer + "/" + new Date().getTime() + "/pic";
             $scope.brightness = data.mean;
         });
+        showError("Picture taken, interval: " + data.delay / 1000 + "s");
     });
     // Weird but it seems that giving showError as callback stop the heartbeat
     Socket.on('camera:error', function (err) {
